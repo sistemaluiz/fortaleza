@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Mensal</title>
+</head>
+<style>
+    div {
+        border: 1px solid blue;
+        background: rgb(216, 216, 223);
+        margin: auto;
+        width: 320px;
+        font-size: 30px;
+    }
+    body{
+        text-align: center;
+         margin-bottom: 50px;
+    }
+    a{
+        text-decoration: none;
+        background: red;
+        margin-top: 20px;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .relatorio{
+        width: 200px;
+        margin: auto;
+        font-size: 30px;
+    }
+    input{
+        font-size: 30px;
+    }
+    button{
+        background: green;
+        padding: 5px;
+        border-radius: 8px;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+   .table-container {
+    overflow-x: auto;  /* Adiciona rolagem horizontal se necessário */
+    width: 100%;       /* O container ocupa 100% da largura disponível */
+}
+
+.table-container table {
+    width: 100%;       /* A tabela ocupa 100% da largura do container */
+    min-width: 600px;  /* Largura mínima da tabela */
+    border-collapse: collapse; /* Colapsa bordas da tabela */
+}
+
+.transaction-list th, .transaction-list td {
+    padding: 10px;               /* Espaçamento interno das células */
+    text-align: left;            /* Alinhamento do texto à esquerda */
+    white-space: nowrap;         /* Impede a quebra de linha dentro das células */
+}
+
+.transaction-list th {
+    background-color: #f2f2f2; /* Cor de fundo para cabeçalhos */
+    border-bottom: 2px solid #ddd; /* Borda inferior nos cabeçalhos */
+}
+
+.transaction-list td {
+    border-bottom: 1px solid #ddd; /* Borda inferior nas células */
+}
+
+</style>
+<body>
+    <form class="relatorio" action="/relatorio-mensal" method="get">
+        <label for="mes">Escolha o mês:</label><br>
+        <select name="mes" id="mes">
+          <option value="1">Janeiro</option>
+          <option value="2">Fevereiro</option>
+          <option value="3">Março</option>
+          <option value="4">Abril</option>
+          <option value="5">Maio</option>
+          <option value="6">Junho</option>
+          <option value="7">Julho</option>
+          <option value="8">Agosto</option>
+          <option value="9">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select><br>
+      
+        <label for="ano">Escolha o ano:</label>
+        <select name="ano" id="ano">
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <!-- Adicione outros anos conforme necessário -->
+        </select><br>
+      
+        <button type="submit">Ver Relatório</button>
+      </form>
+    <h1>Relatório Mensal - <%= mes %>/<%= ano %></h1>
+    <div><p>Total de Entradas: R$ <%= total_entrada_mes.toFixed(2) %></p></div>
+    <div> <p>Total de Saídas: R$ <%= total_saida_mes.toFixed(2) %></p></div>
+    <div> <p>Saldo: R$ <%= saldo_mes.toFixed(2) %></p></div><br><br>
+    <a href="/">Voltar</a>
+
+
+    <div class="table-container">
+        <table id="transaction-list" class="transaction-list hidden">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Transação</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Forma de Pagamento</th>
+                    <th>Nome do Item</th>
+                    <th>Descrição</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <% if (transacoes && transacoes.length === 0) { %>
+                    <tr>
+                        <td colspan="8">Nenhuma transação encontrada.</td>
+                    </tr>
+                <% } else { %>
+                    <% transacoes.forEach(function(transacao) { %>
+                        <tr>
+                            <td><%= transacao.id %></td>
+                            <td><%= transacao.tipo %></td>
+                            <td>R$ <%= transacao.valor %></td>
+                            <td><%= transacao.data %></td>
+                            <td><%= transacao.forma_pagamento %></td>
+                            <td><%= transacao.nome_do_item %></td>
+                            <td><%= transacao.descricao %></td>                            
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>
