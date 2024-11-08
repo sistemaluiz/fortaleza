@@ -61,7 +61,7 @@ app.get('/', async (req, res) => {
             SUM(CASE WHEN tipo = 'saida' AND WEEK(data) = WEEK(CURDATE()) AND fechado = FALSE THEN valor ELSE 0 END) AS total_saida_semana,
             SUM(CASE WHEN tipo = 'entrada' AND MONTH(data) = MONTH(CURDATE()) AND fechado = FALSE THEN valor ELSE 0 END) AS total_entrada_mes,
             SUM(CASE WHEN tipo = 'saida' AND MONTH(data) = MONTH(CURDATE()) AND fechado = FALSE THEN valor ELSE 0 END) AS total_saida_mes
-        FROM transacoes;
+        FROM fortaleza;
     `;
 
     const queryTransacoes = `
@@ -73,7 +73,7 @@ app.get('/', async (req, res) => {
             nome_do_item,
             descricao,
             DATE_FORMAT(data, '%Y-%m-%d') AS data
-        FROM transacoes
+        FROM fortaleza
         WHERE DATE(data) = CURDATE();
     `;
 
@@ -113,7 +113,7 @@ app.post('/add-transacao', async (req, res) => {
     }
 
     const query = `
-        INSERT INTO transacoes (tipo, valor, forma_pagamento, nome_do_item, descricao, fechado, data)
+        INSERT INTO fortaleza (tipo, valor, forma_pagamento, nome_do_item, descricao, fechado, data)
         VALUES (?, ?, ?, ?, ?, FALSE, CURDATE());
     `;
 
@@ -126,7 +126,7 @@ app.post('/add-transacao', async (req, res) => {
 app.post('/update-transacao', async (req, res) => {
     const { id, nome_do_item, tipo, valor, data, forma_pagamento, descricao } = req.body;
     const query = `
-        UPDATE transacoes
+        UPDATE fortaleza
         SET tipo = ?, valor = ?, data = ?, forma_pagamento = ?, nome_do_item = ?, descricao = ?
         WHERE id = ?;
     `;
@@ -137,14 +137,14 @@ app.post('/update-transacao', async (req, res) => {
 
 app.post('/delete-transacao', async (req, res) => {
     const { id } = req.body;
-    const query = 'DELETE FROM transacoes WHERE id = ?';
+    const query = 'DELETE FROM fortaleza WHERE id = ?';
   
         await queryDatabase(query, [id]);
         res.redirect('/');    
 });
 
 app.post('/fechar-caixa', async (req, res) => {
-    const query = 'UPDATE transacoes SET fechado = TRUE WHERE fechado = FALSE';
+    const query = 'UPDATE fortaleza SET fechado = TRUE WHERE fechado = FALSE';
    
         await queryDatabase(query);
         res.redirect('/');   
@@ -169,7 +169,7 @@ app.get('/relatorio-mensal', async (req, res) => {
             SUM(CASE WHEN tipo = 'entrada' THEN valor ELSE 0 END) AS total_entrada_mes,
             SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END) AS total_saida_mes,
             (SUM(CASE WHEN tipo = 'entrada' THEN valor ELSE 0 END) - SUM(CASE WHEN tipo = 'saida' THEN valor ELSE 0 END)) AS saldo_mes
-        FROM transacoes
+        FROM fortaleza
         WHERE MONTH(data) = ? AND YEAR(data) = ?;
     `;
 
@@ -182,7 +182,7 @@ app.get('/relatorio-mensal', async (req, res) => {
             nome_do_item,
             descricao,
             DATE_FORMAT(data, '%Y-%m-%d') AS data
-        FROM transacoes
+        FROM fortaleza
         WHERE MONTH(data) = ? AND YEAR(data) = ?;
     `;
 
