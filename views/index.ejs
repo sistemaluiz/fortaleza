@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Financeiro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+           margin-bottom: 50px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: auto;
+           margin-bottom: 30px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+       
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"] {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .show-hide-btn {
+            background-color: #007bff;
+            color: #fff;
+            margin-top: 20px;
+        }
+        .edit {
+            background-color: #ffc107;
+            color: #fff;
+            margin-right: 5px;
+        }
+        .delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .edit, .delete {
+            padding: 5px 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f8f8;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .main{
+            background: white;
+        }
+        /* Estiliza o container para que as divs fiquem lado a lado */
+.resumo-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que as divs quebrem a linha se necessário */
+    gap: 10px; /* Espaço entre as divs */
+}
+
+/* Estiliza cada div dentro do container */
+.resumo {
+    width: 120px; /* Largura de 80 pixels */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+    height: 70px;    
+    border-radius: 10px;
+    padding: 10px;
+    background: rgb(252, 250, 250);
+}
+
+/* Estilo adicional para os elementos p */
+p {
+    margin: 0; /* Remove a margem padrão */
+}
+
+/* Classes adicionais, se necessário */
+.s11 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.s13, .s14, .s15, .s16, .s17 {
+    font-size: 0.9em;
+}
+
+/* Exemplo de classes para saldo positivo e negativo */
+.saldo-positivo {
+    color: green;    
+}
+
+.saldo-negativo {
+    color: red;
+}
+
+        .salao{
+           text-align: right;
+           margin-top: 10px;
+           margin-right: 10px; 
+           border: none;          
+        }
+        a{
+            background:rgb(15, 235, 62);
+            font-size: 25px;
+            border: none;
+            cursor: pointer;
+        }
+        .meta{
+            background: blue;
+            margin-right: 10px;
+            color: white;
+            padding: 1px;
+            border: none;
+            border-radius: 2px;
+        }
+        .radio {
+            display: flex;
+            margin-bottom: 40px;
+        }
+        .rad {
+            width: 30px;
+        }
+        .relatorio{
+            width: 120px;
+        }
+        #nome_do_item{
+            width: 30px;
+        }
+        .inputs{
+            height: 25px;
+        }
+   .table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table-container table {
+    width: 100%;
+    min-width: 600px; /* or any minimum width you prefer */
+    border-collapse: collapse;
+}
+
+.transaction-list th, .transaction-list td {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap; /* Prevent text wrapping for better readability */
+}
+
+
+    </style>
+</head>
+<body>
+    
+    <div class="salao"><a class="meta" href="/relatorio-mensal">Relatórios</a></div>
+    <div class="container">
+        <h1 class="main">ESTÉTICA AUTOMOTIVA</h1>
+<form action="/add-transacao" method="POST">
+    <label for="nome_do_item">Nome do Item:</label>
+    <div class="radio">
+        <input type="radio" name="nome_do_item" id="pequeno" value="Pequeno" required
+            style="width: 25px; height: 15px; vertical-align: middle;"> Pequeno
+        <input class="rad" type="radio" name="nome_do_item" id="medio" value="Médio" required
+            style="width: 25px; height: 15px; vertical-align: middle;"> Médio
+        <input type="radio" name="nome_do_item" id="grande" value="Grande" required
+            style="width: 25px; height: 15px; vertical-align: middle;"> Grande
+        <br></br>
+    </div>
+    <div class="radio">
+        <input class="rad" type="radio" name="nome_do_item" id="funcionario" value="Funcionário" required
+            style="width: 25px; height: 15px; vertical-align: middle;"> Funcionário
+        <input class="rad" type="radio" name="nome_do_item" id="estacionamento" value="Estacionamento" required
+            style="width: 25px; height: 15px; vertical-align: middle;"> Estacionamento
+        <input class="rad" type="radio" name="nome_do_item" id="saida" value="Saída" required
+            style="width: 25px; height: 15px; vertical-align: middle;"> Saída
+        <br></br>
+    </div>
+    <label for="descricao">Descrição:</label>
+    <input class="inputs" type="text" name="descricao" id="descricao" step="0.01"> <br></br>
+    
+    <label>Tipo:</label>
+    <div class="radio">
+        <input class="rad" type="radio" id="entrada" name="tipo" value="entrada">Entrada
+        <label for="entrada"></label>
+        <input class="rad" type="radio" id="saida" name="tipo" value="saida">Saída
+        <label for="saida"></label>
+    </div>
+    <label for="valor">Valor:</label>
+    <input class="inputs" type="number" name="valor" id="valor" step="0.01" required> <br></br>
+    
+    <label for="forma_pagamento">Forma de Pagamento:</label>
+    <div class="radio">
+        <input class="rad" type="radio" id="pix" name="forma_pagamento" value="pix">Pix
+        <label for="pix"></label><br>
+        <input class="rad" type="radio" id="cartao" name="forma_pagamento" value="cartao">Cartão
+        <label for="cartao"></label><br>
+        <input class="rad" type="radio" id="dinheiro" name="forma_pagamento" value="dinheiro">Dinheiro
+        <label for="dinheiro"></label><br>
+    </div>
+    <button type="submit">Adicionar Transação</button>
+</form>
+
+        <h2 class="s11">Resumo Financeiro</h2>
+        <div class="resumo-container">
+            <div class="resumo"><p id="01" class="<%= saldo > 0 ? 'saldo-positivo' : 'saldo-negativo' %>">Saldo: R$ <%= parseFloat(saldo).toFixed(2) %></p></div>
+                <div class="resumo"><p id="01" class="s13">Total de Entradas: R$ <%= parseFloat(total_entrada).toFixed(2) %></p></div>
+                    <div class="resumo"><p id="01" class="s14">Total de Saídas: R$ - <%= parseFloat(total_saida).toFixed(2) %></p></div>                        
+                            <div class="resumo"><p id="01" class="s16">Entrada do Dia: R$ <%= parseFloat(total_entrada_dia).toFixed(2) %></p></div>
+                                <div class="resumo"> <p id="01" class="s17">Saída do Dia: R$ - <%= parseFloat(total_saida_dia).toFixed(2) %></p></div>
+        </div><br>
+        <button class="show-hide-btn" onclick="toggleTransactions()">Mostrar Transações</button><br>       
+ <div class="table-container">       
+        
+        <table id="transaction-list" class="transaction-list hidden">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Transação</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>forma_pagamento</th>
+                    <th>Nome do Item</th>
+                     <th>Descricao</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (transacoes && transacoes.length === 0) { %>
+                    <tr>
+                        <td colspan="3">Nenhuma transação encontrada.</td>
+                    </tr>
+                <% } else { %>
+                <% transacoes.forEach(function(transacao) { %>
+                    <tr>
+                        <td><%= transacao.id %></td>
+                        <td><%= transacao.tipo %></td>
+                        <td><%= transacao.valor %></td>
+                        <td><%= transacao.data %></td>
+                        <td><%= transacao.forma_pagamento %></td>
+                        <td><%= transacao.nome_do_item %></td>
+                        <td><%= transacao.descricao %></td>
+                        <td>
+                            <!-- <button onclick="openEditModal('<%= JSON.stringify(transacao) %>')" class="edit"><i class="fas fa-edit"></i></button> -->
+                            <button onclick="openEditModal(<%= JSON.stringify(transacao) %>)" class="edit"><i class="fas fa-edit"></i></button>
+
+                            <form id="delete-form-<%= transacao.id %>" action="/delete-transacao" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<%= transacao.id %>">
+                                <button type="submit" onclick="atualizarPaginadelete()" class="delete">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %> 
+                <% } %>
+            </tbody>
+        </table>
+        </div>
+        
+        <form action="/fechar-caixa" method="POST">
+            <button type="submit">Fechar Caixa</button>
+        </form>
+    </div>
+
+    <!-- Modal for Editing -->
+     <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times</span>
+            <h2>Editar Transação</h2>
+            <form id="editForm" action="/update-transacao" method="POST">
+            <input type="hidden" name="id" id="edit-id">
+
+            <label for="edit-tipo">Tipo:</label>
+            <select name="tipo" id="edit-tipo" required>
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+            </select><br><br>
+
+            <label for="edit-valor">Valor:</label>
+            <input type="number" name="valor" id="edit-valor" step="0.01" required><br><br>
+
+            <label for="edit-data">Data:</label>
+            <input type="date" name="data" id="edit-data" required><br><br>
+
+            <label for="edit-forma_pagamento">Forma de Pagamento:</label>
+            <select name="forma_pagamento" id="edit-forma_pagamento" required>
+                <option value="pix">Pix</option>
+                <option value="cartao">Cartão</option>
+                <option value="dinheiro">Dinheiro</option>
+            </select><br><br>
+
+            <label for="edit-nome_do_item">Nome do Item:</label>
+            <input type="text" name="nome_do_item" id="edit-nome_do_item" required><br><br>
+
+            <label for="editDescricaoModal">Descrição:</label>
+            <input type="text" name="descricao" id="editDescricaoModal"><br><br>
+
+            <button type="submit" onclick="atualizarPagina()">Atualizar</button>
+        </form>
+        </div>
+    </div> 
+     
+
+    <script>
+     let transactionsVisible = false; // Variável para controlar a visibilidade das transações
+let isAuthenticated = false; // Variável para controlar se o usuário já autenticou com a senha
+
+function toggleTransactions() {
+    if (!transactionsVisible && !isAuthenticated) {
+        const password = prompt("Digite a senha para acessar as transações:");
+        
+        // Substitua 'senhaSegura' pela senha que você deseja usar
+        const correctPassword = 'senha';
+
+        if (password === correctPassword) {
+            isAuthenticated = true;
+        } else {
+            alert("Senha incorreta. Acesso negado.");
+            return; // Impede que o restante da função seja executado
+        }
+    }
+
+    const list = document.getElementById('transaction-list');
+    const button = document.querySelector('.show-hide-btn');
+
+    if (transactionsVisible) {
+        // Oculta as transações e recarrega a página
+        list.classList.add('hidden');
+        button.textContent = 'Mostrar Transações';
+        location.reload(); // Recarrega a página
+    } else {
+        // Mostra as transações
+        list.classList.remove('hidden');
+        button.textContent = 'Esconder Transações';
+    }
+
+    transactionsVisible = !transactionsVisible;
+}
+
+      function openEditModal(transacao) {
+    console.log('Opening modal with transaction:', transacao);
+
+    const editId = document.getElementById('edit-id');
+    const editTipo = document.getElementById('edit-tipo');
+    const editValor = document.getElementById('edit-valor');
+    const editData = document.getElementById('edit-data');
+    const editFormaPagamento = document.getElementById('edit-forma_pagamento');
+    const editNomeDoItem = document.getElementById('edit-nome_do_item');
+    const editDescricao = document.getElementById('editDescricaoModal');
+
+    console.log('Element references:', {
+        editId,
+        editTipo,
+        editValor,
+        editData,
+        editFormaPagamento,
+        editNomeDoItem,
+        editDescricao
+    });
+
+    // Popula os campos do formulário com os dados da transação
+    editId.value = transacao.id;
+    editTipo.value = transacao.tipo;
+    editValor.value = parseFloat(transacao.valor).toFixed(2);
+    editData.value = transacao.data;
+    editFormaPagamento.value = transacao.forma_pagamento;
+    editNomeDoItem.value = transacao.nome_do_item;
+    editDescricao.value = transacao.descricao; // Preenche com valor vazio se Descricao for null
+
+    const modal = document.getElementById('editModal');
+    modal.style.display = "block";
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editModal');
+    modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('editModal');
+    if (event.target === modal) {
+        modal.style.display = "none";
+        }
+}
+function atualizarPagina() {
+    // Aguarda um breve momento para garantir que o formulário seja processado
+    setTimeout(function() {
+        location.reload(); // Recarrega a página
+    }, 1000); // 1000 milissegundos (1 segundo) de atraso, ajuste conforme necessário
+}
+function atualizarPaginadelete() {
+    // Aguarda um breve momento para garantir que o formulário seja processado
+    setTimeout(function() {
+        location.reload(); // Recarrega a página
+    }, 1000); // 1000 milissegundos (1 segundo) de atraso, ajuste conforme necessário
+}
+    </script>
+</body>
+</html>
